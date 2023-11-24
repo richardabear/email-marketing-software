@@ -479,6 +479,12 @@ class EmailModel extends FormModel implements AjaxLookupModelInterface
      */
     public function hitEmail($stat, $request, $viaBrowser = false, $activeRequest = true)
     {
+        //check for existing IP
+        $ipAddress = $this->ipLookupHelper->getIpAddress();
+        if (!$ipAddress->isTrackable()) {
+            return;
+        }
+
         if (!$stat instanceof Stat) {
             $stat = $this->getEmailStatus($stat);
         }
@@ -537,8 +543,6 @@ class EmailModel extends FormModel implements AjaxLookupModelInterface
             ]
         );
 
-        //check for existing IP
-        $ipAddress = $this->ipLookupHelper->getIpAddress();
         $stat->setIpAddress($ipAddress);
 
         if ($this->dispatcher->hasListeners(EmailEvents::EMAIL_ON_OPEN)) {
