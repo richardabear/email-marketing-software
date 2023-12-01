@@ -96,6 +96,7 @@ EOT
 
                 foreach ($finder as $failedFile) {
                     $file = $failedFile->getRealPath();
+                    echo "File:".$file;
 
                     $lockedtime = filectime($file);
                     if (!(time() - $lockedtime) > $timeout) {
